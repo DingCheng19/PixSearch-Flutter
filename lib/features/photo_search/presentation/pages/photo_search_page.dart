@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-
-import 'package:flutter/material.dart';
-
 import '../../data/datasource/pexels_api_service.dart';
 
 class PhotoSearchPage extends StatefulWidget {

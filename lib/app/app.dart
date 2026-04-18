@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../features/photo_search/presentation/pages/photo_search_page.dart.dart';
+import '../features/photo_search/presentation/pages/photo_search_page.dart';
 
 class PixSearchApp extends StatelessWidget {
   const PixSearchApp({super.key});
