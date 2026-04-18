@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import '../../data/datasource/pexels_api_service.dart';
 
 class PhotoSearchPage extends StatefulWidget {
@@ -102,17 +103,56 @@ class _PhotoSearchPageState extends State<PhotoSearchPage> {
                               itemCount: _photos.length,
                               itemBuilder: (context, index) {
                                 final photo = _photos[index];
-                                final imageUrl = photo['src']?['medium'];
-
-                                if (imageUrl == null) {
+                                final imageUrl = photo['src']?['large'] ??
+                                    photo['src']?['medium'] ??
+                                    '';
+                                final photographer =
+                                    photo['photographer'] ?? '不明';
+                                if (imageUrl.isEmpty) {
                                   return const SizedBox.shrink();
                                 }
-
-                                return ClipRRect(
-                                  borderRadius: BorderRadius.circular(8),
-                                  child: Image.network(
-                                    imageUrl,
-                                    fit: BoxFit.cover,
+                                return GestureDetector(
+                                  onTap: () {
+                                    context.go(
+                                      '/detail',
+                                      extra: {
+                                        'imageUrl': imageUrl,
+                                        'photographer': photographer,
+                                      },
+                                    );
+                                  },
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(8),
+                                    child: Stack(
+                                      fit: StackFit.expand,
+                                      children: [
+                                        Image.network(
+                                          imageUrl,
+                                          fit: BoxFit.cover,
+                                        ),
+                                        Positioned(
+                                          left: 8,
+                                          right: 8,
+                                          bottom: 8,
+                                          child: Container(
+                                            padding: const EdgeInsets.symmetric(
+                                              horizontal: 8,
+                                              vertical: 4,
+                                            ),
+                                            color: Colors.black54,
+                                            child: Text(
+                                              photographer,
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: const TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 12,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 );
                               },

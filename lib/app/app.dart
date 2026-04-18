@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
-
-import '../features/photo_search/presentation/pages/photo_search_page.dart';
+import 'package:pix_search/app/router.dart';
 
 class PixSearchApp extends StatelessWidget {
   const PixSearchApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return MaterialApp.router(
       title: 'PixSearch',
+      debugShowCheckedModeBanner: false,
+      routerConfig: appRouter,
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
         useMaterial3: true,
       ),
-      home: const PhotoSearchPage(),
     );
   }
 }
