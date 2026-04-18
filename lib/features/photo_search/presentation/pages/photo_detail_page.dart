@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class PhotoDetailPage extends StatelessWidget {
   final String imageUrl;
@@ -14,6 +15,12 @@ class PhotoDetailPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            context.pop();
+          },
+        ),
         title: const Text('写真詳細'),
       ),
       body: Column(

@@ -110,7 +110,7 @@ class _PhotoSearchPageState extends State<PhotoSearchPage> {
                                 }
                                 return GestureDetector(
                                   onTap: () {
-                                    context.go(
+                                    context.push(
                                       '/detail',
                                       extra: photo,
                                     );
