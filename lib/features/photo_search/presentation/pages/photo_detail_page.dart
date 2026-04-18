@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../domain/entities/photo.dart';
+
 class PhotoDetailPage extends StatelessWidget {
-  final String imageUrl;
-  final String photographer;
+  final Photo photo;
 
   const PhotoDetailPage({
     super.key,
-    required this.imageUrl,
-    required this.photographer,
+    required this.photo
   });
 
   @override
@@ -28,14 +28,14 @@ class PhotoDetailPage extends StatelessWidget {
         children: [
           Expanded(
             child: Image.network(
-              imageUrl,
+              photo.detailUrl,
               fit: BoxFit.cover,
             ),
           ),
           Padding(
             padding: const EdgeInsets.all(16),
             child: Text(
-              '撮影者: $photographer',
+              '撮影者: ${photo.photographer}',
               style: const TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w600,

@@ -103,7 +103,7 @@ class _PhotoSearchPageState extends State<PhotoSearchPage> {
                               ),
                               itemCount: _photos.length,
                               itemBuilder: (context, index) {
-                                final photo = _photos[index];final imageUrl = photo.imageUrl;
+                                final photo = _photos[index];final imageUrl = photo.previewUrl;
                                 final photographer = photo.photographer;
                                 if (imageUrl.isEmpty) {
                                   return const SizedBox.shrink();

@@ -15,11 +15,7 @@ final GoRouter appRouter = GoRouter(
       path: '/detail',
       builder: (context, state) {
         final photo = state.extra as Photo;
-
-        return PhotoDetailPage(
-          imageUrl: photo.imageUrl,
-          photographer: photo.photographer,
-        );
+        return PhotoDetailPage(photo: photo);
       },
     ),
   ],
