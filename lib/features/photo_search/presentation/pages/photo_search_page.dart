@@ -11,6 +11,11 @@ class PhotoSearchPage extends StatefulWidget {
 class _PhotoSearchPageState extends State<PhotoSearchPage> {
   final TextEditingController _searchController = TextEditingController();
   final PexelsApiService _pexelsApiService = PexelsApiService();
+
+  List<dynamic> _photos = [];
+  bool _isLoading = false;
+  String? _error;
+
   @override
   void dispose() {
     _searchController.dispose();
@@ -26,11 +31,25 @@ class _PhotoSearchPageState extends State<PhotoSearchPage> {
       return;
     }
 
+    setState(() {
+      _isLoading = true;
+      _error = null;
+    });
+
     try {
       final result = await _pexelsApiService.searchPhotos(keyword);
       debugPrint('検索成功: $result');
+      setState(() {
+        _photos = result['photos'] ?? [];
+      });
     } catch (e) {
-      debugPrint('検索失敗: $e');
+      setState(() {
+        _error = e.toString();
+      });
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
     }
   }
 
@@ -58,10 +77,46 @@ class _PhotoSearchPageState extends State<PhotoSearchPage> {
               child: const Text('検索する'),
             ),
             const SizedBox(height: 24),
-            const Expanded(
-              child: Center(
-                child: Text('ここに検索結果が表示されます'),
-              ),
+            Expanded(
+              child: _isLoading
+                  ? const Center(
+                      child: CircularProgressIndicator(),
+                    )
+                  : _error != null
+                      ? Center(
+                          child: Text('エラー: $_error'),
+                        )
+                      : _photos.isEmpty
+                          ? const Center(
+                              child: Text('ここに検索結果が表示されます'),
+                            )
+                          : GridView.builder(
+                              padding: const EdgeInsets.all(8),
+                              gridDelegate:
+                                  const SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 2,
+                                crossAxisSpacing: 8,
+                                mainAxisSpacing: 8,
+                                childAspectRatio: 0.8,
+                              ),
+                              itemCount: _photos.length,
+                              itemBuilder: (context, index) {
+                                final photo = _photos[index];
+                                final imageUrl = photo['src']?['medium'];
+
+                                if (imageUrl == null) {
+                                  return const SizedBox.shrink();
+                                }
+
+                                return ClipRRect(
+                                  borderRadius: BorderRadius.circular(8),
+                                  child: Image.network(
+                                    imageUrl,
+                                    fit: BoxFit.cover,
+                                  ),
+                                );
+                              },
+                            ),
             ),
           ],
         ),
