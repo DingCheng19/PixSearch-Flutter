@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../../data/datasource/pexels_api_service.dart';
+import '../../domain/entities/photo.dart';
 
 class PhotoSearchPage extends StatefulWidget {
   const PhotoSearchPage({super.key});
@@ -13,7 +14,7 @@ class _PhotoSearchPageState extends State<PhotoSearchPage> {
   final TextEditingController _searchController = TextEditingController();
   final PexelsApiService _pexelsApiService = PexelsApiService();
 
-  List<dynamic> _photos = [];
+  List<Photo> _photos = [];
   bool _isLoading = false;
   String? _error;
 
@@ -41,7 +42,7 @@ class _PhotoSearchPageState extends State<PhotoSearchPage> {
       final result = await _pexelsApiService.searchPhotos(keyword);
       debugPrint('検索成功: $result');
       setState(() {
-        _photos = result['photos'] ?? [];
+        _photos = result;
       });
     } catch (e) {
       setState(() {
@@ -102,12 +103,8 @@ class _PhotoSearchPageState extends State<PhotoSearchPage> {
                               ),
                               itemCount: _photos.length,
                               itemBuilder: (context, index) {
-                                final photo = _photos[index];
-                                final imageUrl = photo['src']?['large'] ??
-                                    photo['src']?['medium'] ??
-                                    '';
-                                final photographer =
-                                    photo['photographer'] ?? '不明';
+                                final photo = _photos[index];final imageUrl = photo.imageUrl;
+                                final photographer = photo.photographer;
                                 if (imageUrl.isEmpty) {
                                   return const SizedBox.shrink();
                                 }
@@ -115,10 +112,7 @@ class _PhotoSearchPageState extends State<PhotoSearchPage> {
                                   onTap: () {
                                     context.go(
                                       '/detail',
-                                      extra: {
-                                        'imageUrl': imageUrl,
-                                        'photographer': photographer,
-                                      },
+                                      extra: photo,
                                     );
                                   },
                                   child: ClipRRect(

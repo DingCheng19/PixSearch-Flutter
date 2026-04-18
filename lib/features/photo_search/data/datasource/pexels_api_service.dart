@@ -1,5 +1,7 @@
 import 'package:dio/dio.dart';
 
+import '../../domain/entities/photo.dart';
+
 class PexelsApiService {
   // 🔑 dart-define で渡されたAPIキーを取得する
   // flutter run --dart-define=PEXELS_API_KEY=xxxx で値が入る
@@ -17,7 +19,7 @@ class PexelsApiService {
 
   final Dio _dio;
 
-  Future<Map<String, dynamic>> searchPhotos(String query) async {
+  Future<List<Photo>> searchPhotos(String query) async {
     final response = await _dio.get(
       '/search',
       queryParameters: {
@@ -26,6 +28,10 @@ class PexelsApiService {
       },
     );
 
-    return response.data as Map<String, dynamic>;
+    final List photosJson = response.data['photos'];
+
+    return photosJson
+        .map((json) => Photo.fromJson(json))
+        .toList();
   }
 }
